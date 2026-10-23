@@ -1,24 +1,24 @@
-# data-engineer-toolkit
+# Assignment Data Engineer Bacth 15 Day 46
 
+Jalankan airflow, database dan spark
 ## airflow
 `docker compose --profile airflow up -d`
 
-## grafana
-`docker compose --profile grafana up -d`
-
-## postgres
+## postgres dan sql
 `docker compose --profile postgres up -d`
-or `docker compose --profile db up -d` (mysql + postgres)
+`docker compose --profile db up -d` 
 
-## mysql
-`docker compose --profile mysql up -d`
-or `docker compose --profile db up -d` (mysql + postgres)
-
-## hive
-`docker compose --profile hive up -d`
-
-## kafka
-`docker compose --profile kafka up -d`
 
 ## spark
 `docker compose --profile spark up -d`
+
+setelah airflow, database dan spark dijalankan,
+akses airflow melalui http://localhost:8080/home
+dag pyspark_batch_processing_dag untuk melakukan proses
+membaca dataset orders.csv dan order_items.csv di dalam folder
+/airflow/data, data mentah akan disimpan di airflow/data/output/staging lalu kedua tabel akan dijoin orders_raw dan items_raw
+lalu data difilter dari data anomali untuk dan disimpan di orders_clean dan items_clean,
+setelahnya data akan di join disimpan di data_joined dan selanjutnya di proses untuk distandarisasi,
+status_payment dan payment_method yang kosong akan diisi UNKNOWN dan diberi flags Missing Status/Method detected di kolom internal_notes,
+setelahnya, dibuat kolom turunan value_per_line atau gmv, hasil kali dari kolom quantity dan unit_price
+data final akan disimpan di data_final dalam bentuk parquet dan disimpan dengan metode overwrite.
