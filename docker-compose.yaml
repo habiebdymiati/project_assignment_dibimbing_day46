@@ -2,6 +2,8 @@
 x-airflow-common:
   &airflow-common
   build: ./airflow/.
+  environment:
+    - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/data:/opt/airflow/data
@@ -13,6 +15,7 @@ x-airflow-common:
     &airflow-common-depends-on
     airflow-postgres:
       condition: service_healthy
+
 
 services:
   airflow-postgres:
@@ -197,6 +200,7 @@ services:
       - ./spark/.env
     environment:
       SPARK_MODE: master
+
     ports:
       - 10010:8080
       - 7077:7077
@@ -226,7 +230,7 @@ services:
 
   spark-worker-2:
     build: ./spark/.
-    container_name: spark-worker-2
+    container_name: spark-worker-2 
     ports:
       - 10012:8081
     env_file:
